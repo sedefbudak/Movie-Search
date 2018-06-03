@@ -18,6 +18,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.contentInset = UIEdgeInsets(top: 70, left: 0, bottom: 0, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 80
@@ -28,6 +29,15 @@ class SearchViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender:Any?) {
+        if segue.identifier == "ShowDetailView" {
+            let detailViewController = segue.destination as! DetailViewController
+            let indexPath = sender as! IndexPath
+            let resultMovie = search.movieList[indexPath.row]
+            detailViewController.movie = resultMovie
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
@@ -61,6 +71,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         cell.configure(for: resultMovie)
         return cell
         
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "ShowDetailView", sender: indexPath)
     }
     
 }
