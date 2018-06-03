@@ -17,7 +17,7 @@ class Movie: Codable, CustomStringConvertible  {
     var title  = ""
     var popularity  = 0.0
     var vote  = 0.0
-    var imagePath = ""
+    var imagePath: String? = ""
     var overview = ""
     var year = ""
     

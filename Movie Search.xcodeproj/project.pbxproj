@@ -16,6 +16,7 @@
 		23D3B6EE20C07F7500495A13 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D3B6ED20C07F7500495A13 /* Search.swift */; };
 		23D3B6F020C084CB00495A13 /* MovieCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23D3B6EF20C084CB00495A13 /* MovieCell.xib */; };
 		23D3B6F420C09D3200495A13 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D3B6F320C09D3200495A13 /* MovieCell.swift */; };
+		23E6365420C4034F00323D30 /* UIImageView+Downloading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E6365320C4034F00323D30 /* UIImageView+Downloading.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		23D3B6ED20C07F7500495A13 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		23D3B6EF20C084CB00495A13 /* MovieCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieCell.xib; sourceTree = "<group>"; };
 		23D3B6F320C09D3200495A13 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
+		23E6365320C4034F00323D30 /* UIImageView+Downloading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Downloading.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				23D3B6D920C0791700495A13 /* AppDelegate.swift */,
 				23D3B6EB20C07C6000495A13 /* MovieResults.swift */,
 				23D3B6ED20C07F7500495A13 /* Search.swift */,
+				23E6365320C4034F00323D30 /* UIImageView+Downloading.swift */,
 				23D3B6EF20C084CB00495A13 /* MovieCell.xib */,
 				23D3B6F320C09D3200495A13 /* MovieCell.swift */,
 				23D3B6DB20C0791700495A13 /* SearchViewController.swift */,
@@ -153,6 +156,7 @@
 				23D3B6EC20C07C6000495A13 /* MovieResults.swift in Sources */,
 				23D3B6F420C09D3200495A13 /* MovieCell.swift in Sources */,
 				23D3B6DA20C0791700495A13 /* AppDelegate.swift in Sources */,
+				23E6365420C4034F00323D30 /* UIImageView+Downloading.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

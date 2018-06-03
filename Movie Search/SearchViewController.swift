@@ -20,6 +20,7 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = 80
         let cellNib = UINib(nibName: "MovieCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "MovieCell")
         searchBar.becomeFirstResponder()
