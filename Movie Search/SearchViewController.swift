@@ -18,12 +18,16 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.contentInset = UIEdgeInsets(top: 70, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 80
-        let cellNib = UINib(nibName: "MovieCell", bundle: nil)
+        var cellNib = UINib(nibName: "MovieCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "MovieCell")
+        cellNib = UINib(nibName: "NothingFound", bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: "NothingFound")
+        cellNib = UINib(nibName: "LoadingCell", bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: "LoadingCell")
         searchBar.becomeFirstResponder()
     }
     
@@ -54,23 +58,34 @@ extension SearchViewController: UISearchBarDelegate {
             self.tableView.reloadData()
         })
     }
-    
 }
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return search.movieList.count
+        switch search.state {
+        case .noResults: return 1
+        case .loading: return 1
+        case .notSearchedYet: return 0
+        case .results(let list): return list.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cellIdentifier = "MovieCell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! MovieCell
-        let resultMovie = search.movieList[indexPath.row]
-        cell.configure(for: resultMovie)
-        return cell
-        
+        switch search.state {
+        case .noResults :
+            return tableView.dequeueReusableCell(withIdentifier: "NothingFound", for: indexPath)
+        case .results(let list):
+            let cellIdentifier = "MovieCell"
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! MovieCell
+            let resultMovie = list[indexPath.row]
+            cell.configure(for: resultMovie)
+            return cell
+        case .notSearchedYet:
+            fatalError("Should never get here")
+        case .loading:
+            return tableView.dequeueReusableCell(withIdentifier: "LoadingCell", for: indexPath)
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2303DD0F20C5430000830261 /* NothingFound.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2303DD0E20C5430000830261 /* NothingFound.xib */; };
+		2303DD1120C54F0A00830261 /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2303DD1020C54F0A00830261 /* LoadingCell.xib */; };
 		23D3B6DA20C0791700495A13 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D3B6D920C0791700495A13 /* AppDelegate.swift */; };
 		23D3B6DC20C0791700495A13 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D3B6DB20C0791700495A13 /* SearchViewController.swift */; };
 		23D3B6DF20C0791700495A13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23D3B6DD20C0791700495A13 /* Main.storyboard */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2303DD0E20C5430000830261 /* NothingFound.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NothingFound.xib; sourceTree = "<group>"; };
+		2303DD1020C54F0A00830261 /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
 		23D3B6D620C0791700495A13 /* Movie Search.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Movie Search.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D3B6D920C0791700495A13 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		23D3B6DB20C0791700495A13 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -69,10 +73,12 @@
 				23D3B6D920C0791700495A13 /* AppDelegate.swift */,
 				23D3B6EB20C07C6000495A13 /* MovieResults.swift */,
 				23D3B6ED20C07F7500495A13 /* Search.swift */,
+				2303DD1020C54F0A00830261 /* LoadingCell.xib */,
 				23E6365320C4034F00323D30 /* UIImageView+Downloading.swift */,
 				23D3B6EF20C084CB00495A13 /* MovieCell.xib */,
 				23D3B6F320C09D3200495A13 /* MovieCell.swift */,
 				23D3B6DB20C0791700495A13 /* SearchViewController.swift */,
+				2303DD0E20C5430000830261 /* NothingFound.xib */,
 				23D3B6DD20C0791700495A13 /* Main.storyboard */,
 				23E6365520C420A900323D30 /* DetailViewController.swift */,
 				23D3B6E020C0791800495A13 /* Assets.xcassets */,
@@ -141,6 +147,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D3B6E420C0791800495A13 /* LaunchScreen.storyboard in Resources */,
+				2303DD0F20C5430000830261 /* NothingFound.xib in Resources */,
+				2303DD1120C54F0A00830261 /* LoadingCell.xib in Resources */,
 				23D3B6E120C0791800495A13 /* Assets.xcassets in Resources */,
 				23D3B6F020C084CB00495A13 /* MovieCell.xib in Resources */,
 				23D3B6DF20C0791700495A13 /* Main.storyboard in Resources */,

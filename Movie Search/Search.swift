@@ -63,7 +63,6 @@ class Search {
                 if let httpResponse = response as? HTTPURLResponse, let data = data {
                     var results = self.parse(data: data)
                     self.movieList = results
-                    print(self.movieList)
                     if results.isEmpty {
                         newState = .noResults
                     } else {
