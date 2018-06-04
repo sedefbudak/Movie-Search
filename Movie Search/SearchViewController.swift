@@ -13,8 +13,14 @@ class SearchViewController: UIViewController {
     private let search = Search()
     
     @IBOutlet weak var searchBar: UISearchBar!
-    
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var sortingSegmentedControl: UISegmentedControl!
+
+    
+    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+        performSearch()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,13 +54,24 @@ class SearchViewController: UIViewController {
         performSearch()
     }
     
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
+    
+    func showNetworkError(){
+        let alert = UIAlertController(title: "Whoops...", message: "There was an error accessing the Movie Database. Please try again.", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        present(alert, animated:true, completion: nil)
+    }
+    
     
 }
 
 extension SearchViewController: UISearchBarDelegate {
     
     func performSearch() {
-        search.performSearch(text: searchBar.text!, completion: {
+        search.performSearch(text: searchBar.text!, selectedSegment: sortingSegmentedControl.selectedSegmentIndex, completion: {
             self.tableView.reloadData()
         })
     }

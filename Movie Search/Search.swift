@@ -12,7 +12,6 @@ import UIKit
 class Search {
     
     var movieList = [Movie]()
-    typealias SearchComplete = (Bool) -> Void
     
     enum State {
         case notSearchedYet
@@ -46,7 +45,9 @@ class Search {
         }
     }
     
-    func performSearch(text: String,  completion: @escaping () -> ()) {
+    
+    
+    func performSearch(text: String, selectedSegment: Int,  completion: @escaping () -> ()) {
         
         if !text.isEmpty {
             
@@ -60,17 +61,26 @@ class Search {
             
             dataTask = session.dataTask(with: url, completionHandler: { data, response, error  in
                 var newState = State.notSearchedYet
-                if let httpResponse = response as? HTTPURLResponse, let data = data {
+                
+                if let error = error as NSError?, error.code == -999 {
+                    return
+                }
+                if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data {
                     var results = self.parse(data: data)
+                    
                     self.movieList = results
                     if results.isEmpty {
                         newState = .noResults
                     } else {
-                        results.sort(by: <)
+                        if selectedSegment == 0 {
+                        results.sort(by: nameOrder)
+                        }
+                         else {
+                            results.sort(by: rateOrder)
+                        }
                         newState = .results(results)
                     }
                 }
-                
                 DispatchQueue.main.async {
                     self.state = newState
                     completion()

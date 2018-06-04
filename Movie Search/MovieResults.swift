@@ -37,7 +37,20 @@ class Movie: Codable, CustomStringConvertible  {
     }
 }
 
-func < (lhs: Movie, rhs: Movie) -> Bool {
+func nameOrder (lhs: Movie, rhs: Movie) -> Bool {
     return lhs.title.localizedStandardCompare(rhs.title) == .orderedAscending
 }
+
+func dateOrder(lhs: Movie, rhs: Movie) -> Bool {
+    return lhs.year >= rhs.year
+}
+
+func rateOrder(lhs: Movie, rhs: Movie) -> Bool {
+    return lhs.popularity >= rhs.popularity
+}
+
+/* let lhsPopularity = String(lhs.popularity)
+print(lhsPopularity)
+let rhsPopularity = String(rhs.popularity)
+return lhsPopularity.localizedStandardCompare(rhsPopularity) == .orderedDescending */
 
