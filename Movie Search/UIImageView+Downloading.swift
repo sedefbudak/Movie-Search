@@ -2,7 +2,7 @@
 //  UIImageView+Downloading.swift
 //  Movie Search
 //
-//  Created by Efe Budak on 03/06/2018.
+//  Created by Sedef Budak on 03/06/2018.
 //  Copyright © 2018 Sedef Budak. All rights reserved.
 //
 

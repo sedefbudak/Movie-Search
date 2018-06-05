@@ -2,7 +2,7 @@
 //  Search.swift
 //  Movie Search
 //
-//  Created by Efe Budak on 31/05/2018.
+//  Created by Sedef Budak on 31/05/2018.
 //  Copyright © 2018 Sedef Budak. All rights reserved.
 //
 
@@ -67,8 +67,6 @@ class Search {
                 }
                 if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data {
                     var results = self.parse(data: data)
-                    
-                    self.movieList = results
                     if results.isEmpty {
                         newState = .noResults
                     } else {
@@ -78,6 +76,7 @@ class Search {
                          else {
                             results.sort(by: rateOrder)
                         }
+                        self.movieList = results
                         newState = .results(results)
                     }
                 }

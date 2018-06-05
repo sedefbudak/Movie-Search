@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  Movie Search
 //
-//  Created by Efe Budak on 31/05/2018.
+//  Created by Sedef Budak on 31/05/2018.
 //  Copyright © 2018 Sedef Budak. All rights reserved.
 //
 
@@ -108,6 +108,15 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         performSegue(withIdentifier: "ShowDetailView", sender: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        switch search.state {
+        case .notSearchedYet, .loading, .noResults:
+            return nil
+        case .results:
+            return indexPath
+        }
     }
     
 }

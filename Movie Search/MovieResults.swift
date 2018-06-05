@@ -2,7 +2,7 @@
 //  File.swift
 //  Movie Search
 //
-//  Created by Efe Budak on 31/05/2018.
+//  Created by Sedef Budak on 31/05/2018.
 //  Copyright © 2018 Sedef Budak. All rights reserved.
 //
 
