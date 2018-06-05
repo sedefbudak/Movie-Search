@@ -44,9 +44,7 @@ class Search {
             return []
         }
     }
-    
-    
-    
+        
     func performSearch(text: String, selectedSegment: Int,  completion: @escaping () -> ()) {
         
         if !text.isEmpty {
@@ -87,9 +85,10 @@ class Search {
                 }
             })
             dataTask?.resume()
-            
         }
-        
     }
+    
+        
 }
+
 

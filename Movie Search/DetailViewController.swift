@@ -10,6 +10,8 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
+    private let search = Search()
+    
     @IBOutlet weak var popupView: UIView!
     @IBOutlet weak var bigImageView: UIImageView!
     @IBOutlet weak var bigTitle: UILabel!
@@ -19,8 +21,10 @@ class DetailViewController: UIViewController {
     var movie : Movie!
     var downloadTask : URLSessionDownloadTask?
     
+    
     @IBAction func close() {
         dismiss(animated: true, completion: nil)
+    //    search.indexOfSelectedChecklist = -1
     }
     
     override func viewDidLoad() {
@@ -37,7 +41,7 @@ class DetailViewController: UIViewController {
     }
     
     func updateUI() {
-        bigTitle.text = "Name: \(movie.title)"
+        bigTitle.text =  "Name: \(movie.title)"
         bigDate.text = "Release date: \(movie.year)"
         bigPopularity.text = "Popularity: \(String(movie.popularity))"
         bigTopic.text = movie.overview
@@ -46,5 +50,4 @@ class DetailViewController: UIViewController {
             downloadTask = bigImageView.loadImage(url: imageURL!)
         }
     }
-
 }

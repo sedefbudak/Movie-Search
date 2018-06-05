@@ -15,15 +15,22 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var sortingSegmentedControl: UISegmentedControl!
-
+    
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         performSearch()
+        let userDefaults = UserDefaults()
+        userDefaults.set(sortingSegmentedControl.selectedSegmentIndex, forKey: "segmentIndex")
+        userDefaults.synchronize()
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let userDefaults = UserDefaults()
+        if userDefaults.value(forKey: "segmentIndex") != nil {
+        sortingSegmentedControl.selectedSegmentIndex = userDefaults.value(forKey: "segmentIndex") as! Int
+        }
         tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
@@ -37,6 +44,11 @@ class SearchViewController: UIViewController {
         searchBar.becomeFirstResponder()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -45,7 +57,7 @@ class SearchViewController: UIViewController {
         if segue.identifier == "ShowDetailView" {
             let detailViewController = segue.destination as! DetailViewController
             let indexPath = sender as! IndexPath
-            let resultMovie = search.movieList[indexPath.row]
+            let resultMovie = search.movieList[(indexPath.row)]
             detailViewController.movie = resultMovie
         }
     }
@@ -65,6 +77,26 @@ class SearchViewController: UIViewController {
         present(alert, animated:true, completion: nil)
     }
     
+    // funcs of load and save movie list
+    func documentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory,in: .userDomainMask)
+        return paths[0]
+    }
+    
+    func dataFilePath() -> URL {
+        return documentsDirectory().appendingPathComponent("Movie Search.plist")
+    }
+    
+    func saveMovies() {
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(search.movieList)
+            try data.write(to: dataFilePath(),options: Data.WritingOptions.atomic)
+        } catch {
+            print("Error encoding item array!")
+        }
+    }
+    
     
 }
 
@@ -73,6 +105,7 @@ extension SearchViewController: UISearchBarDelegate {
     func performSearch() {
         search.performSearch(text: searchBar.text!, selectedSegment: sortingSegmentedControl.selectedSegmentIndex, completion: {
             self.tableView.reloadData()
+            
         })
     }
 }
@@ -119,5 +152,5 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+  
 }
-
