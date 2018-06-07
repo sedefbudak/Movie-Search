@@ -42,7 +42,7 @@ class DetailViewController: UIViewController {
     
     func updateUI() {
         bigTitle.text =  "Name: \(movie.title)"
-        bigDate.text = "Release date: \(movie.year)"
+        bigDate.text = "Release date: \(movie.releaseDateV2)"
         bigPopularity.text = "Popularity: \(String(movie.popularity))"
         bigTopic.text = movie.overview
         if movie.imagePath != nil {

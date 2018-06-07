@@ -19,8 +19,10 @@ class Movie: Codable, CustomStringConvertible  {
     var vote  = 0.0
     var imagePath: String? = ""
     var overview = ""
-    var year = ""
-    
+    var releaseDate = ""
+    var releaseDateV2: Date? {
+        return myLocalDateFormatter.date(from: self.releaseDate)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case title
@@ -28,7 +30,7 @@ class Movie: Codable, CustomStringConvertible  {
         case overview
         case vote = "vote_average"
         case imagePath = "poster_path"
-        case year = "release_date"
+        case releaseDate = "release_date"
         
     }
     
@@ -42,7 +44,7 @@ func nameOrder (lhs: Movie, rhs: Movie) -> Bool {
 }
 
 func dateOrder(lhs: Movie, rhs: Movie) -> Bool {
-    return lhs.year >= rhs.year
+    return lhs.releaseDate >= rhs.releaseDate
 }
 
 func rateOrder(lhs: Movie, rhs: Movie) -> Bool {

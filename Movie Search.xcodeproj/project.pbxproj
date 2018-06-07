@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2303DD0F20C5430000830261 /* NothingFound.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2303DD0E20C5430000830261 /* NothingFound.xib */; };
 		2303DD1120C54F0A00830261 /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2303DD1020C54F0A00830261 /* LoadingCell.xib */; };
+		2371992F20C88FB700DE07DC /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2371992E20C88FB700DE07DC /* DateFormatter.swift */; };
 		23D3B6DA20C0791700495A13 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D3B6D920C0791700495A13 /* AppDelegate.swift */; };
 		23D3B6DC20C0791700495A13 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D3B6DB20C0791700495A13 /* SearchViewController.swift */; };
 		23D3B6DF20C0791700495A13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 23D3B6DD20C0791700495A13 /* Main.storyboard */; };
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		2303DD0E20C5430000830261 /* NothingFound.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NothingFound.xib; sourceTree = "<group>"; };
 		2303DD1020C54F0A00830261 /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
+		2371992E20C88FB700DE07DC /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = SOURCE_ROOT; };
 		23D3B6D620C0791700495A13 /* Movie Search.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Movie Search.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D3B6D920C0791700495A13 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		23D3B6DB20C0791700495A13 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				23D3B6E020C0791800495A13 /* Assets.xcassets */,
 				23D3B6E220C0791800495A13 /* LaunchScreen.storyboard */,
 				23D3B6E520C0791800495A13 /* Info.plist */,
+				2371992E20C88FB700DE07DC /* DateFormatter.swift */,
 			);
 			path = "Movie Search";
 			sourceTree = "<group>";
@@ -162,6 +165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2371992F20C88FB700DE07DC /* DateFormatter.swift in Sources */,
 				23D3B6DC20C0791700495A13 /* SearchViewController.swift in Sources */,
 				23D3B6EE20C07F7500495A13 /* Search.swift in Sources */,
 				23D3B6EC20C07C6000495A13 /* MovieResults.swift in Sources */,

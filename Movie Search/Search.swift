@@ -54,6 +54,7 @@ class Search {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             
             let url = movieUrl(searchKey: text)
+            print("url : \(url)")
             
             let session = URLSession.shared
             
