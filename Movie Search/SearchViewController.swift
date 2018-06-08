@@ -8,13 +8,35 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
     
     private let search = Search()
+    private let searchGenre = SearchGenre()
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var sortingSegmentedControl: UISegmentedControl!
+    var page = 1
+    var nameGenres = [String]()
+
+    @IBOutlet weak var searchByGenreTabBar: UITabBar!
+    
+    
+    @IBOutlet weak var genrePicker: UIPickerView!
+    var genrePickerData : [String] = []
+    
+    @IBAction func searchByGenreButton(_ sender: UIButton) {
+        genrePicker.isHidden = false
+        searchGenre.getGenre(completion: {
+            let countOfGenres = self.searchGenre.genres.count
+            for i in 0..<countOfGenres  {
+                self.nameGenres.append(self.searchGenre.genres[i].name)
+            }
+            self.genrePickerData = self.nameGenres
+            self.genrePicker.reloadAllComponents();
+        })
+    }
     
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
@@ -27,9 +49,12 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.genrePicker.delegate = self
+        self.genrePicker.dataSource = self
+        
         let userDefaults = UserDefaults()
         if userDefaults.value(forKey: "segmentIndex") != nil {
-        sortingSegmentedControl.selectedSegmentIndex = userDefaults.value(forKey: "segmentIndex") as! Int
+            sortingSegmentedControl.selectedSegmentIndex = userDefaults.value(forKey: "segmentIndex") as! Int
         }
         tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
         tableView.delegate = self
@@ -60,16 +85,46 @@ class SearchViewController: UIViewController {
             let resultMovie = search.movieList[(indexPath.row)]
             detailViewController.movie = resultMovie
         }
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
-        performSearch()
+        if segue.identifier == "ListOfMovies" {
+            let listViewController = segue.destination as! ListViewController
+            let row = sender as! Int
+            let selectedGenre = searchGenre.genres[row].id
+            listViewController.genre = selectedGenre
+        }
     }
     
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
     
+    // func of picker
+    
+    func loadGenrePicker() {
+        
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return genrePickerData.count
+    }
+    
+    internal func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return genrePickerData[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        performSegue(withIdentifier: "ListOfMovies", sender: row)
+    }
+    
+    // func of search
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
+        performSearch()
+    }
+    
+    // func of error
     func showNetworkError(){
         let alert = UIAlertController(title: "Whoops...", message: "There was an error accessing the Movie Database. Please try again.", preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -77,33 +132,33 @@ class SearchViewController: UIViewController {
         present(alert, animated:true, completion: nil)
     }
     
-    // funcs of load and save movie list
-    func documentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory,in: .userDomainMask)
-        return paths[0]
-    }
-    
-    func dataFilePath() -> URL {
-        return documentsDirectory().appendingPathComponent("Movie Search.plist")
-    }
-    
-    func saveMovies() {
-        let encoder = PropertyListEncoder()
-        do {
-            let data = try encoder.encode(search.movieList)
-            try data.write(to: dataFilePath(),options: Data.WritingOptions.atomic)
-        } catch {
-            print("Error encoding item array!")
-        }
-    }
-    
-    
+    /*
+     // funcs of load and save movie list
+     func documentsDirectory() -> URL {
+     let paths = FileManager.default.urls(for: .documentDirectory,in: .userDomainMask)
+     return paths[0]
+     }
+     
+     func dataFilePath() -> URL {
+     return documentsDirectory().appendingPathComponent("Movie Search.plist")
+     }
+     
+     func saveMovies() {
+     let encoder = PropertyListEncoder()
+     do {
+     let data = try encoder.encode(search.movieList)
+     try data.write(to: dataFilePath(),options: Data.WritingOptions.atomic)
+     } catch {
+     print("Error encoding item array!")
+     }
+     } */
 }
 
 extension SearchViewController: UISearchBarDelegate {
     
+    
     func performSearch() {
-        search.performSearch(text: searchBar.text!, selectedSegment: sortingSegmentedControl.selectedSegmentIndex, completion: {
+        search.performSearch(text: searchBar.text!, selectedSegment: sortingSegmentedControl.selectedSegmentIndex, page: page, completion: {
             self.tableView.reloadData()
             
         })
@@ -126,11 +181,18 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         case .noResults :
             return tableView.dequeueReusableCell(withIdentifier: "NothingFound", for: indexPath)
         case .results(let list):
+            
             let cellIdentifier = "MovieCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! MovieCell
             let resultMovie = list[indexPath.row]
             cell.configure(for: resultMovie)
+            print ("tableview list count : \(list.count)")
+            if indexPath.row == list.count - 1 {
+                page += 1
+                performSearch()
+            }
             return cell
+            
         case .notSearchedYet:
             fatalError("Should never get here")
         case .loading:
@@ -152,5 +214,5 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-  
+    
 }

@@ -37,5 +37,16 @@ class MovieCell: UITableViewCell {
             downloadTask = artworkImageView.loadImage(url: imageURL!)
         }
     }
+    
+    func configureByGenre(for result: MovieByGenre) {
+        
+        nameLabel.text = result.title
+        rateLabel.text = String(result.popularity)
+        if result.imagePath != nil {
+            artworkImageView.image = UIImage(named: "Placeholder")
+            let imageURL = URL(string: "http://image.tmdb.org/t/p/w185//\(result.imagePath!)")
+            downloadTask = artworkImageView.loadImage(url: imageURL!)
+        }
+    }
 }
 

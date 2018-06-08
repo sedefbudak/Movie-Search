@@ -34,6 +34,20 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="AZK-al-Lux"/>
                                 </connections>
                             </searchBar>
+                            <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Ir-V4-X2x">
+                                <rect key="frame" x="0.0" y="416" width="375" height="216"/>
+                                <rect key="contentStretch" x="1" y="0.0" width="1" height="1"/>
+                            </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvf-6t-LXT">
+                                <rect key="frame" x="0.0" y="632" width="375" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.2751765839041096" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Search By Genre">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="searchByGenreButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="G8l-Fe-6sl"/>
+                                </connections>
+                            </button>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Pa-lw-7VT">
                                 <rect key="frame" x="0.0" y="76" width="375" height="44"/>
                                 <items>
@@ -57,12 +71,18 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="4Pa-lw-7VT" firstAttribute="top" secondItem="pnh-r7-58b" secondAttribute="bottom" id="1be-uT-GRJ"/>
+                            <constraint firstItem="2Ir-V4-X2x" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="3Wk-4e-MBh"/>
+                            <constraint firstItem="Cvf-6t-LXT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="4vX-19-aro"/>
+                            <constraint firstItem="2Ir-V4-X2x" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="D4A-6T-Kgv"/>
                             <constraint firstItem="4Pa-lw-7VT" firstAttribute="leading" secondItem="pnh-r7-58b" secondAttribute="leading" id="DW2-my-1rv"/>
                             <constraint firstItem="4Pa-lw-7VT" firstAttribute="trailing" secondItem="GOf-U0-2Iu" secondAttribute="trailing" id="KR0-po-AcU"/>
                             <constraint firstItem="pnh-r7-58b" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Mgs-re-YzP"/>
                             <constraint firstItem="GOf-U0-2Iu" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="SYR-tP-ECo"/>
+                            <constraint firstItem="Cvf-6t-LXT" firstAttribute="top" secondItem="2Ir-V4-X2x" secondAttribute="bottom" id="b0r-vZ-Bww"/>
                             <constraint firstItem="4Pa-lw-7VT" firstAttribute="trailing" secondItem="pnh-r7-58b" secondAttribute="trailing" id="bmm-Hh-jsR"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Cvf-6t-LXT" secondAttribute="bottom" constant="5" id="d7b-Xv-VvS"/>
                             <constraint firstItem="4Pa-lw-7VT" firstAttribute="leading" secondItem="GOf-U0-2Iu" secondAttribute="leading" id="gDj-JR-zji"/>
+                            <constraint firstItem="Cvf-6t-LXT" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="oCk-Iz-ApQ"/>
                             <constraint firstAttribute="trailing" secondItem="pnh-r7-58b" secondAttribute="trailing" id="scq-1I-99N"/>
                             <constraint firstItem="pnh-r7-58b" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="w8p-9b-0nX"/>
                             <constraint firstItem="GOf-U0-2Iu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="yly-Ge-5of"/>
@@ -71,15 +91,60 @@
                     </view>
                     <navigationItem key="navigationItem" id="8GH-jH-NgR"/>
                     <connections>
+                        <outlet property="genrePicker" destination="2Ir-V4-X2x" id="wki-3k-U17"/>
                         <outlet property="searchBar" destination="pnh-r7-58b" id="xym-Xi-Yed"/>
                         <outlet property="sortingSegmentedControl" destination="3lx-nr-EFU" id="CEZ-mL-yID"/>
                         <outlet property="tableView" destination="GOf-U0-2Iu" id="Los-mz-Onv"/>
                         <segue destination="a1I-HC-WnP" kind="presentation" identifier="ShowDetailView" id="EMs-z9-A1g"/>
+                        <segue destination="J03-7p-ovP" kind="presentation" identifier="ListOfMovies" id="Er0-ev-NUO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="916" y="133.5832083958021"/>
+        </scene>
+        <!--List View Controller-->
+        <scene sceneID="LdX-k3-mdt">
+            <objects>
+                <viewController id="J03-7p-ovP" customClass="ListViewController" customModule="Movie_Search" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="I0t-ya-BTO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="j8D-1b-aPF">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6g4-kI-fxJ">
+                                <rect key="frame" x="0.0" y="5" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="Movies by Genre" id="cfs-Ha-Nna">
+                                        <barButtonItem key="leftBarButtonItem" title="Back" style="plain" id="12x-wT-oZ6">
+                                            <connections>
+                                                <action selector="backButton:" destination="J03-7p-ovP" id="KFR-ey-oRt"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="j8D-1b-aPF" secondAttribute="trailing" id="HGT-Y9-2al"/>
+                            <constraint firstItem="j8D-1b-aPF" firstAttribute="leading" secondItem="eEq-5d-HvF" secondAttribute="leading" id="ZDq-4c-ZOP"/>
+                            <constraint firstItem="eEq-5d-HvF" firstAttribute="bottom" secondItem="j8D-1b-aPF" secondAttribute="bottom" id="f3p-me-jPb"/>
+                            <constraint firstItem="j8D-1b-aPF" firstAttribute="top" secondItem="eEq-5d-HvF" secondAttribute="top" id="mlx-ak-18R"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="eEq-5d-HvF"/>
+                    </view>
+                    <connections>
+                        <outlet property="moviesTableView" destination="j8D-1b-aPF" id="6EE-FO-kLV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6yJ-Hr-ek8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="916" y="860"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="g4r-E6-qSn">
