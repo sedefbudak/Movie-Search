@@ -12,8 +12,12 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
    
     @IBOutlet weak var moviesTableView: UITableView!
     var genre = 0
-    var page = 1
+    var pageGenre = 1
     private let search = SearchByGenre()
+    
+    @IBOutlet weak var sortingSegmentedControl: UISegmentedControl!
+
+    @IBOutlet weak var listOfMoviesNavigation: UINavigationItem!
     
     @IBAction func backButton(_ sender: UIBarButtonItem) {
       //  navigationController?.pop
@@ -21,6 +25,11 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        listOfMoviesNavigation.title = navigationItem.title ?? "Movies by Selected Genre"
+        let userDefaults = UserDefaults()
+        if userDefaults.value(forKey: "segmentIndex") != nil {
+            sortingSegmentedControl.selectedSegmentIndex = userDefaults.value(forKey: "segmentIndex") as! Int
+        }
         moviesTableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
         moviesTableView.delegate = self
         moviesTableView.dataSource = self
@@ -31,7 +40,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         moviesTableView.register(cellNib, forCellReuseIdentifier: "NothingFound")
         cellNib = UINib(nibName: "LoadingCell", bundle: nil)
         moviesTableView.register(cellNib, forCellReuseIdentifier: "LoadingCell")
-        search.performSearchByGenre(selectedGenre: String(genre), page: page,  completion: {
+        search.performSearchByGenre(selectedGenre: String(genre), page: pageGenre, selectedSegment: sortingSegmentedControl.selectedSegmentIndex, completion: {
             self.moviesTableView.reloadData()
         })        // Do any additional setup after loading the view.
     }
@@ -40,7 +49,33 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender:Any?) {
+        if segue.identifier == "ShowDetailView" {
+            let detailViewController = segue.destination as! DetailViewController
+            let indexPath = sender as! IndexPath
+            let resultMovie = search.movieListbyGenre[(indexPath.row)]
+            detailViewController.movieByGenre = resultMovie
+        }
+        
+    }
 
+    // func of sorting
+    
+    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+        pageGenre = 1
+        search.performSearchByGenre(selectedGenre: String(genre), page: pageGenre, selectedSegment: sortingSegmentedControl.selectedSegmentIndex,  completion: {
+            self.moviesTableView.reloadData()
+
+        })
+        let userDefaults = UserDefaults()
+        userDefaults.set(sortingSegmentedControl.selectedSegmentIndex, forKey: "segmentIndex")
+        userDefaults.synchronize()
+    }
+    
+    
+    // func of tableView
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch search.state {
         case .noResults: return 1
@@ -61,8 +96,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.configureByGenre(for: resultMovie)
             print ("tableview list count : \(list.count)")
             if indexPath.row == list.count - 1 {
-                page += 1
-                search.performSearchByGenre(selectedGenre: String(genre), page: page,  completion: {
+                pageGenre += 1
+                search.performSearchByGenre(selectedGenre: String(genre), page: pageGenre, selectedSegment: sortingSegmentedControl.selectedSegmentIndex, completion: {
                     self.moviesTableView.reloadData()
                 })
             }
@@ -75,15 +110,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "ShowDetailView", sender: indexPath)
     }
-    */
-
 }

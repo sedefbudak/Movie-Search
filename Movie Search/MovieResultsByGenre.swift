@@ -23,12 +23,18 @@ class MovieByGenre: Codable, CustomStringConvertible {
     var popularity  = 0.0
     var overview = ""
     var imagePath: String? = ""
+    var releaseDate = ""
+    var releaseDateV2: Date? {
+        return myLocalDateFormatter.date(from: self.releaseDate)
+    }
     
     private enum CodingKeys: String, CodingKey {
         case title
         case popularity
         case overview
         case imagePath = "poster_path"
+        case releaseDate = "release_date"
+
     }
     
     var description: String {
@@ -36,5 +42,16 @@ class MovieByGenre: Codable, CustomStringConvertible {
     }
 }
 
+func nameOrder (lhs: MovieByGenre, rhs: MovieByGenre) -> Bool {
+    return lhs.title.localizedStandardCompare(rhs.title) == .orderedAscending
+}
+
+func dateOrder(lhs: MovieByGenre, rhs: MovieByGenre) -> Bool {
+    return lhs.releaseDate >= rhs.releaseDate
+}
+
+func rateOrder(lhs: MovieByGenre, rhs: MovieByGenre) -> Bool {
+    return lhs.popularity >= rhs.popularity
+}
 
 

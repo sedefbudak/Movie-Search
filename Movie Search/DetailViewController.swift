@@ -19,12 +19,12 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var bigPopularity: UILabel!
     @IBOutlet weak var bigTopic: UILabel!
     var movie : Movie!
+    var movieByGenre : MovieByGenre!
     var downloadTask : URLSessionDownloadTask?
     
     
     @IBAction func close() {
         dismiss(animated: true, completion: nil)
-    //    search.indexOfSelectedChecklist = -1
     }
     
     override func viewDidLoad() {
@@ -33,20 +33,33 @@ class DetailViewController: UIViewController {
         if movie != nil {
         updateUI()
         }
+        else if movieByGenre != nil {
+            updateUIForMovieByGenre()
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func updateUI() {
         bigTitle.text =  "Name: \(movie.title)"
-        bigDate.text = "Release date: \(String(describing: movie.releaseDateV2))"
+        bigDate.text = "Release date: \(String(describing: movie.releaseDate))"
         bigPopularity.text = "Popularity: \(String(movie.popularity))"
         bigTopic.text = movie.overview
         if movie.imagePath != nil {
             let imageURL = URL(string: "http://image.tmdb.org/t/p/w185//\(movie.imagePath!)")
+            downloadTask = bigImageView.loadImage(url: imageURL!)
+        }
+    }
+    
+    func updateUIForMovieByGenre() {
+        bigTitle.text =  "Name: \(movieByGenre.title)"
+        bigDate.text = "Release date: \(String(describing: movieByGenre.releaseDate))"
+        bigPopularity.text = "Popularity: \(String(movieByGenre.popularity))"
+        bigTopic.text = movieByGenre.overview
+        if movieByGenre.imagePath != nil {
+            let imageURL = URL(string: "http://image.tmdb.org/t/p/w185//\(movieByGenre.imagePath!)")
             downloadTask = bigImageView.loadImage(url: imageURL!)
         }
     }

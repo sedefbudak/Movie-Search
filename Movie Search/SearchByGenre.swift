@@ -11,7 +11,7 @@ import UIKit
 
 class SearchByGenre {
     
-    var movieListbyGente = [MovieByGenre]()
+    var movieListbyGenre = [MovieByGenre]()
     
     enum State {
         case notSearchedYet
@@ -24,11 +24,19 @@ class SearchByGenre {
     
     private var dataTask: URLSessionDataTask? = nil
     
-    private func moviesbyGenreUrl(selectedGenre: String, page: Int) -> URL {
-        let urlString = "https://api.themoviedb.org/3/discover/movie?api_key=962b77a3c4dfa95e0e12b1655fdb620a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=\(page)&with_genres=\(selectedGenre)"
+    private func moviesbyGenreUrl(selectedGenre: String, page: Int, sortingSelectedSegment: Int) -> URL {
+        if sortingSelectedSegment == 0 {
+        let urlString = "https://api.themoviedb.org/3/discover/movie?api_key=962b77a3c4dfa95e0e12b1655fdb620a&language=en-US&sort_by=original_title.asc&include_adult=false&include_video=false&page=\(page)&with_genres=\(selectedGenre)"
         let url = URL(string: urlString)
         print("URL: \(url!)")
         return url!
+        } else {
+            let urlString = "https://api.themoviedb.org/3/discover/movie?api_key=962b77a3c4dfa95e0e12b1655fdb620a&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=\(page)&with_genres=\(selectedGenre)"
+            let url = URL(string: urlString)
+            print("URL: \(url!)")
+            return url!
+            
+        }
     }
     
     private func parseForGenre(data: Data) -> [MovieByGenre] {
@@ -45,13 +53,13 @@ class SearchByGenre {
     
    
     
-    func performSearchByGenre(selectedGenre: String, page: Int,  completion: @escaping () -> ()) {
+    func performSearchByGenre(selectedGenre: String, page: Int, selectedSegment: Int, completion: @escaping () -> ()) {
         
         dataTask?.cancel()
         state = .loading
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
         
-        let url = moviesbyGenreUrl(selectedGenre: selectedGenre, page: page)
+        let url = moviesbyGenreUrl(selectedGenre: selectedGenre, page: page, sortingSelectedSegment: selectedSegment)
         
         let session = URLSession.shared
         
@@ -66,14 +74,15 @@ class SearchByGenre {
                 if results.isEmpty {
                     newState = .noResults
                 } else {
-                    self.movieListbyGente += results
-                      /* if selectedSegment == 0 {
-                     self.movieList.sort(by: nameOrder)
-                     }
-                     else {
-                     self.movieList.sort(by: rateOrder)
-                     }*/
-                    newState = .resultsByGenre(self.movieListbyGente)
+                    if page == 1 {
+                        self.movieListbyGenre = []
+                        self.movieListbyGenre += results
+                        newState = .resultsByGenre(self.movieListbyGenre)
+
+                    } else {
+                    self.movieListbyGenre += results
+                    newState = .resultsByGenre(self.movieListbyGenre)
+                    }
                 }
             }
             DispatchQueue.main.async {

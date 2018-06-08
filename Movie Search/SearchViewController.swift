@@ -16,12 +16,8 @@ class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var sortingSegmentedControl: UISegmentedControl!
     var page = 1
     var nameGenres = [String]()
-
-    @IBOutlet weak var searchByGenreTabBar: UITabBar!
-    
     
     @IBOutlet weak var genrePicker: UIPickerView!
     var genrePickerData : [String] = []
@@ -38,24 +34,10 @@ class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         })
     }
     
-    
-    @IBAction func segmentChanged(_ sender: UISegmentedControl) {
-        performSearch()
-        let userDefaults = UserDefaults()
-        userDefaults.set(sortingSegmentedControl.selectedSegmentIndex, forKey: "segmentIndex")
-        userDefaults.synchronize()
-    }
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.genrePicker.delegate = self
         self.genrePicker.dataSource = self
-        
-        let userDefaults = UserDefaults()
-        if userDefaults.value(forKey: "segmentIndex") != nil {
-            sortingSegmentedControl.selectedSegmentIndex = userDefaults.value(forKey: "segmentIndex") as! Int
-        }
         tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
@@ -89,7 +71,9 @@ class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
             let listViewController = segue.destination as! ListViewController
             let row = sender as! Int
             let selectedGenre = searchGenre.genres[row].id
+            let selectedGenreName = searchGenre.genres[row].name
             listViewController.genre = selectedGenre
+            listViewController.navigationItem.title = "\(selectedGenreName) Movies"
         }
     }
     
@@ -158,7 +142,7 @@ extension SearchViewController: UISearchBarDelegate {
     
     
     func performSearch() {
-        search.performSearch(text: searchBar.text!, selectedSegment: sortingSegmentedControl.selectedSegmentIndex, page: page, completion: {
+        search.performSearch(text: searchBar.text!, page: page, completion: {
             self.tableView.reloadData()
             
         })
