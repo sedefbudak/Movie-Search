@@ -16,16 +16,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     private let search = SearchByGenre()
     
     @IBOutlet weak var sortingSegmentedControl: UISegmentedControl!
-
-    @IBOutlet weak var listOfMoviesNavigation: UINavigationItem!
-    
-    @IBAction func backButton(_ sender: UIBarButtonItem) {
-      //  navigationController?.pop
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        listOfMoviesNavigation.title = navigationItem.title ?? "Movies by Selected Genre"
         let userDefaults = UserDefaults()
         if userDefaults.value(forKey: "segmentIndex") != nil {
             sortingSegmentedControl.selectedSegmentIndex = userDefaults.value(forKey: "segmentIndex") as! Int

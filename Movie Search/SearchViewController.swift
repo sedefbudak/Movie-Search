@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class SearchViewController: UIViewController {
     
     private let search = Search()
     private let searchGenre = SearchGenre()
@@ -21,20 +21,9 @@ class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     @IBOutlet weak var genrePicker: UIPickerView!
     var genrePickerData : [String] = []
     
-    @IBAction func searchByGenreButton(_ sender: UIButton) {
-        genrePicker.isHidden = false
-        searchGenre.getGenre(completion: {
-            let countOfGenres = self.searchGenre.genres.count
-            for i in 0..<countOfGenres  {
-                self.nameGenres.append(self.searchGenre.genres[i].name)
-            }
-            self.genrePickerData = self.nameGenres
-            self.genrePicker.reloadAllComponents();
-        })
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.isNavigationBarHidden = true
         self.genrePicker.delegate = self
         self.genrePicker.dataSource = self
         tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
@@ -47,16 +36,28 @@ class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         tableView.register(cellNib, forCellReuseIdentifier: "NothingFound")
         cellNib = UINib(nibName: "LoadingCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "LoadingCell")
-        searchBar.becomeFirstResponder()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationController?.isNavigationBarHidden = true
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        navigationController?.isNavigationBarHidden = false
+    }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    @IBAction func searchByGenreButton(_ sender: UIButton) {
+        genrePicker.isHidden = false
+        searchGenre.getGenre(completion: {
+            let countOfGenres = self.searchGenre.genres.count
+            for i in 0..<countOfGenres  {
+                self.nameGenres.append(self.searchGenre.genres[i].name)
+            }
+            self.genrePickerData = self.nameGenres
+            self.genrePicker.reloadAllComponents();
+        })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender:Any?) {
@@ -76,44 +77,21 @@ class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         }
     }
     
-    func position(for bar: UIBarPositioning) -> UIBarPosition {
-        return .topAttached
-    }
-    
-    // func of picker
-    
-    func loadGenrePicker() {
-        
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return genrePickerData.count
-    }
-    
-    internal func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return genrePickerData[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        performSegue(withIdentifier: "ListOfMovies", sender: row)
-    }
-    
-    // func of search
+//    func position(for bar: UIBarPositioning) -> UIBarPosition {
+//        return .topAttached
+//    }
+   
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
         performSearch()
     }
     
-    // func of error
-    func showNetworkError(){
-        let alert = UIAlertController(title: "Whoops...", message: "There was an error accessing the Movie Database. Please try again.", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(action)
-        present(alert, animated:true, completion: nil)
-    }
+//    // func of error
+//    func showNetworkError(){
+//        let alert = UIAlertController(title: "Whoops...", message: "There was an error accessing the Movie Database. Please try again.", preferredStyle: .alert)
+//        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+//        alert.addAction(action)
+//        present(alert, animated:true, completion: nil)
+//    }
     
     /*
      // funcs of load and save movie list
@@ -139,7 +117,6 @@ class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerView
 
 extension SearchViewController: UISearchBarDelegate {
     
-    
     func performSearch() {
         search.performSearch(text: searchBar.text!, selectedSegment: page, completion: {
             self.tableView.reloadData()
@@ -164,12 +141,10 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         case .noResults :
             return tableView.dequeueReusableCell(withIdentifier: "NothingFound", for: indexPath)
         case .results(let list):
-            
             let cellIdentifier = "MovieCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! MovieCell
             let resultMovie = list[indexPath.row]
             cell.configure(for: resultMovie)
-            print ("tableview list count : \(list.count)")
             if indexPath.row == list.count - 1 {
                 page += 1
                 performSearch()
@@ -196,6 +171,28 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             return indexPath
         }
     }
+}
+
+extension SearchViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
+    func loadGenrePicker() {
+        
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return genrePickerData.count
+    }
+    
+    internal func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return genrePickerData[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        performSegue(withIdentifier: "ListOfMovies", sender: row)
+    }
     
 }
