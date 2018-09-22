@@ -2,7 +2,7 @@
 //  DateFormatter.swift
 //  Movie Search
 //
-//  Created by Efe Budak on 06/06/2018.
+//  Created by Sedef Budak on 06/06/2018.
 //  Copyright © 2018 Sedef Budak. All rights reserved.
 //
 

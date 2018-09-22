@@ -10,7 +10,6 @@ import UIKit
 
 class SearchViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    
     private let search = Search()
     private let searchGenre = SearchGenre()
     
@@ -142,7 +141,7 @@ extension SearchViewController: UISearchBarDelegate {
     
     
     func performSearch() {
-        search.performSearch(text: searchBar.text!, page: page, completion: {
+        search.performSearch(text: searchBar.text!, selectedSegment: page, completion: {
             self.tableView.reloadData()
             
         })
