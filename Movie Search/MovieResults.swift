@@ -9,7 +9,13 @@
 import Foundation
 
 class MovieResults: Codable {
+    var totalPages = Int()
     var results = [Movie]()
+    
+    private enum CodingKeys: String, CodingKey {
+        case totalPages = "total_pages"
+        case results = "results"
+    }
 }
 
 class Movie: Codable, CustomStringConvertible  {
@@ -31,7 +37,6 @@ class Movie: Codable, CustomStringConvertible  {
         case vote = "vote_average"
         case imagePath = "poster_path"
         case releaseDate = "release_date"
-        
     }
     
     var description: String {
@@ -51,8 +56,4 @@ func rateOrder(lhs: Movie, rhs: Movie) -> Bool {
     return lhs.popularity >= rhs.popularity
 }
 
-/* let lhsPopularity = String(lhs.popularity)
-print(lhsPopularity)
-let rhsPopularity = String(rhs.popularity)
-return lhsPopularity.localizedStandardCompare(rhsPopularity) == .orderedDescending */
 

@@ -23,24 +23,17 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         if userDefaults.value(forKey: "segmentIndex") != nil {
             sortingSegmentedControl.selectedSegmentIndex = userDefaults.value(forKey: "segmentIndex") as! Int
         }
-        moviesTableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
+        sortingSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.9568627477, green: 0.6588235497, blue: 0.5450980663, alpha: 1)], for: .normal)
+        sortingSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: #colorLiteral(red: 1, green: 0.3962473869, blue: 0.4897101521, alpha: 1)], for: .selected)
+        moviesTableView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
         moviesTableView.delegate = self
         moviesTableView.dataSource = self
-        moviesTableView.rowHeight = 80
-        var cellNib = UINib(nibName: "MovieCell", bundle: nil)
-        moviesTableView.register(cellNib, forCellReuseIdentifier: "MovieCell")
-        cellNib = UINib(nibName: "NothingFound", bundle: nil)
-        moviesTableView.register(cellNib, forCellReuseIdentifier: "NothingFound")
-        cellNib = UINib(nibName: "LoadingCell", bundle: nil)
-        moviesTableView.register(cellNib, forCellReuseIdentifier: "LoadingCell")
-        search.performSearchByGenre(selectedGenre: String(genre), page: pageGenre, selectedSegment: sortingSegmentedControl.selectedSegmentIndex, completion: {
-            self.moviesTableView.reloadData()
-        })        // Do any additional setup after loading the view.
+        createCells()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        performSearch()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender:Any?) {
@@ -50,22 +43,32 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             let resultMovie = search.movieListbyGenre[(indexPath.row)]
             detailViewController.movieByGenre = resultMovie
         }
-        
+    }
+    
+    private func createCells(){
+        var cellNib = UINib(nibName: "MovieCell", bundle: nil)
+        moviesTableView.register(cellNib, forCellReuseIdentifier: "MovieCell")
+        cellNib = UINib(nibName: "NothingFound", bundle: nil)
+        moviesTableView.register(cellNib, forCellReuseIdentifier: "NothingFound")
+        cellNib = UINib(nibName: "LoadingCell", bundle: nil)
+        moviesTableView.register(cellNib, forCellReuseIdentifier: "LoadingCell")
     }
 
     // func of sorting
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
         pageGenre = 1
-        search.performSearchByGenre(selectedGenre: String(genre), page: pageGenre, selectedSegment: sortingSegmentedControl.selectedSegmentIndex,  completion: {
-            self.moviesTableView.reloadData()
-
-        })
+        performSearch()
         let userDefaults = UserDefaults()
         userDefaults.set(sortingSegmentedControl.selectedSegmentIndex, forKey: "segmentIndex")
         userDefaults.synchronize()
     }
     
+    private func performSearch(){
+        search.performSearchByGenre(selectedGenre: String(genre), page: pageGenre, selectedSegment: sortingSegmentedControl.selectedSegmentIndex,  completion: {
+            self.moviesTableView.reloadData()
+        })
+    }
     
     // func of tableView
     
@@ -87,15 +90,11 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! MovieCell
             let resultMovie = list[indexPath.row]
             cell.configureByGenre(for: resultMovie)
-            print ("tableview list count : \(list.count)")
-            if indexPath.row == list.count - 1 {
+            if indexPath.row == list.count - 1 && pageGenre < search.totalPages{
                 pageGenre += 1
-                search.performSearchByGenre(selectedGenre: String(genre), page: pageGenre, selectedSegment: sortingSegmentedControl.selectedSegmentIndex, completion: {
-                    self.moviesTableView.reloadData()
-                })
+                performSearch()
             }
             return cell
-            
         case .notSearchedYet:
             fatalError("Should never get here")
         case .loading:

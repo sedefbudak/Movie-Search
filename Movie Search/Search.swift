@@ -12,6 +12,7 @@ import UIKit
 class Search {
     
     var movieList = [Movie]()
+    var totalPages = Int()
     
     enum State {
         case notSearchedYet
@@ -24,12 +25,10 @@ class Search {
     
     private var dataTask: URLSessionDataTask? = nil
     
-    private func movieUrl(searchKey: String) -> URL {
+    private func movieUrl(searchKey: String, page: Int) -> URL {
         let encodedText = searchKey.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let urlString = "https://api.themoviedb.org/3/search/movie?api_key=962b77a3c4dfa95e0e12b1655fdb620a&language=en-US&query=\(encodedText)&page=1&include_adult=false"
-        
+        let urlString = "https://api.themoviedb.org/3/search/movie?api_key=962b77a3c4dfa95e0e12b1655fdb620a&language=en-US&query=\(encodedText)&page=\(page)&include_adult=false"
         let url = URL(string: urlString)
-        print("URL: \(url!)")
         return url!
     }
     
@@ -37,6 +36,7 @@ class Search {
         do {
             let decoder = JSONDecoder()
             let result = try decoder.decode(MovieResults.self, from: data)
+            totalPages = result.totalPages
             return result.results
         }
         catch {
@@ -45,7 +45,7 @@ class Search {
         }
     }
         
-    func performSearch(text: String, selectedSegment: Int,  completion: @escaping () -> ()) {
+    func performSearch(text: String, page: Int,  completion: @escaping () -> ()) {
         
         if !text.isEmpty {
             
@@ -53,30 +53,26 @@ class Search {
             state = .loading
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             
-            let url = movieUrl(searchKey: text)
-            print("url : \(url)")
+            let url = movieUrl(searchKey: text, page: page)
             
             let session = URLSession.shared
             
             dataTask = session.dataTask(with: url, completionHandler: { data, response, error  in
                 var newState = State.notSearchedYet
                 
-                if let error = error as NSError?, error.code == -999 {
-                    return
-                }
                 if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data {
-                    var results = self.parse(data: data)
+                    let results = self.parse(data: data)
                     if results.isEmpty {
                         newState = .noResults
                     } else {
-                        if selectedSegment == 0 {
-                        results.sort(by: nameOrder)
+                        if page == 1 {
+                            self.movieList.removeAll()
+                            self.movieList = results
+                            newState = .results(self.movieList)
+                        } else {
+                            self.movieList += results
+                            newState = .results(self.movieList)
                         }
-                         else {
-                            results.sort(by: rateOrder)
-                        }
-                        self.movieList = results
-                        newState = .results(results)
                     }
                 }
                 DispatchQueue.main.async {

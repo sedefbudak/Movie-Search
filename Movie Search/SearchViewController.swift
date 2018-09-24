@@ -26,26 +26,31 @@ class SearchViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
         self.genrePicker.delegate = self
         self.genrePicker.dataSource = self
-        tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 80
+        searchBar.delegate = self
+        createCells()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationController?.isNavigationBarHidden = true
+        genrePicker.isHidden = true
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        navigationController?.isNavigationBarHidden = false
+    }
+    
+    private func createCells(){
         var cellNib = UINib(nibName: "MovieCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "MovieCell")
         cellNib = UINib(nibName: "NothingFound", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "NothingFound")
         cellNib = UINib(nibName: "LoadingCell", bundle: nil)
         tableView.register(cellNib, forCellReuseIdentifier: "LoadingCell")
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        navigationController?.isNavigationBarHidden = true
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(true)
-        navigationController?.isNavigationBarHidden = false
     }
     
     @IBAction func searchByGenreButton(_ sender: UIButton) {
@@ -77,52 +82,27 @@ class SearchViewController: UIViewController {
         }
     }
     
-//    func position(for bar: UIBarPositioning) -> UIBarPosition {
-//        return .topAttached
-//    }
-   
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
         performSearch()
     }
-    
-//    // func of error
-//    func showNetworkError(){
-//        let alert = UIAlertController(title: "Whoops...", message: "There was an error accessing the Movie Database. Please try again.", preferredStyle: .alert)
-//        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-//        alert.addAction(action)
-//        present(alert, animated:true, completion: nil)
-//    }
-    
-    /*
-     // funcs of load and save movie list
-     func documentsDirectory() -> URL {
-     let paths = FileManager.default.urls(for: .documentDirectory,in: .userDomainMask)
-     return paths[0]
-     }
-     
-     func dataFilePath() -> URL {
-     return documentsDirectory().appendingPathComponent("Movie Search.plist")
-     }
-     
-     func saveMovies() {
-     let encoder = PropertyListEncoder()
-     do {
-     let data = try encoder.encode(search.movieList)
-     try data.write(to: dataFilePath(),options: Data.WritingOptions.atomic)
-     } catch {
-     print("Error encoding item array!")
-     }
-     } */
 }
 
 extension SearchViewController: UISearchBarDelegate {
     
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
+    
     func performSearch() {
-        search.performSearch(text: searchBar.text!, selectedSegment: page, completion: {
+        search.performSearch(text: searchBar.text!, page: page, completion: {
             self.tableView.reloadData()
-            
         })
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String){
+        page = 1
+    }
+
 }
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
@@ -145,12 +125,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! MovieCell
             let resultMovie = list[indexPath.row]
             cell.configure(for: resultMovie)
-            if indexPath.row == list.count - 1 {
+            if indexPath.row == list.count - 1 && page < search.totalPages {
                 page += 1
                 performSearch()
             }
             return cell
-            
         case .notSearchedYet:
             fatalError("Should never get here")
         case .loading:

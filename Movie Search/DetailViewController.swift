@@ -9,7 +9,7 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-
+    
     private let search = Search()
     
     @IBOutlet weak var popupView: UIView!
@@ -31,15 +31,11 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         popupView.layer.cornerRadius = 10
         if movie != nil {
-        updateUI()
+            updateUI()
         }
         else if movieByGenre != nil {
             updateUIForMovieByGenre()
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
     
     func updateUI() {
