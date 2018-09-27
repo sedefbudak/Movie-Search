@@ -25,7 +25,7 @@ class Search {
     
     private var dataTask: URLSessionDataTask? = nil
     
-    private func movieUrl(searchKey: String, page: Int) -> URL {
+    private func createMovieUrl(searchKey: String, page: Int) -> URL {
         let encodedText = searchKey.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         let urlString = "https://api.themoviedb.org/3/search/movie?api_key=962b77a3c4dfa95e0e12b1655fdb620a&language=en-US&query=\(encodedText)&page=\(page)&include_adult=false"
         let url = URL(string: urlString)
@@ -51,9 +51,9 @@ class Search {
             
             dataTask?.cancel()
             state = .loading
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             
-            let url = movieUrl(searchKey: text, page: page)
+            let url = createMovieUrl(searchKey: text, page: page)
             
             let session = URLSession.shared
             
